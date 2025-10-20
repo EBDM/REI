@@ -1,1 +1,270 @@
+import React, { useState } from 'react';
+import { FileText, CheckCircle, Home, Users, Shield, FolderPlus, Send, Bell, Star, ArrowRight, ArrowLeft } from 'lucide-react';
+
+// Helper component for styled list items
+const ListItem = ({ children, icon }) => {
+    const Icon = icon;
+    return (
+        <li className="flex items-start space-x-3 py-2">
+            <div className="flex-shrink-0">
+                <Icon className="h-6 w-6 text-blue-500 mt-1" aria-hidden="true" />
+            </div>
+            <span className="text-gray-700">{children}</span>
+        </li>
+    );
+};
+
+// Helper component for form links
+const FormLink = ({ formatId, description }) => (
+    <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" className="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
+        <p className="font-semibold text-blue-700 group-hover:underline">{formatId}</p>
+        <p className="text-sm text-gray-600">{description}</p>
+    </a>
+);
+
+
+const App = () => {
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const steps = [
+        {
+            name: "Bienvenida",
+            icon: Home
+        },
+        {
+            name: "Protocolo",
+            icon: FileText
+        },
+        {
+            name: "Autorización",
+            icon: CheckCircle
+        },
+        {
+            name: "Comités",
+            icon: Users
+        },
+        {
+            name: "Formatos",
+            icon: FolderPlus
+        },
+        {
+            name: "Expediente",
+            icon: Send
+        },
+        {
+            name: "Obligaciones",
+            icon: Bell
+        },
+        {
+            name: "Finalizado",
+            icon: Star
+        }
+    ];
+
+    const nextStep = () => {
+        if (currentStep < steps.length - 1) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
+    const prevStep = () => {
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        }
+    };
+    
+    const goToStep = (stepIndex) => {
+        if (stepIndex >= 0 && stepIndex < steps.length) {
+            setCurrentStep(stepIndex);
+        }
+    };
+
+    const renderStepContent = () => {
+        switch (currentStep) {
+            case 0: // Welcome
+                return (
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Asistente de Registro Estatal de Investigación (REI)</h2>
+                        <p className="text-lg text-gray-600 mb-6">Bienvenido/a. Esta herramienta le guiará paso a paso a través del proceso para registrar su protocolo de investigación ante la Secretaría de Salud Jalisco.</p>
+                        <p className="text-gray-600 mb-8">El objetivo del REI es centralizar, sistematizar y asegurar la calidad ética de las investigaciones en salud en el estado, optimizando recursos y fortaleciendo las políticas públicas.</p>
+                        <button onClick={nextStep} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center justify-center mx-auto">
+                            Comenzar Registro <ArrowRight className="ml-2 h-5 w-5" />
+                        </button>
+                    </div>
+                );
+
+            case 1: // Protocolo
+                return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 1: Elaboración del Protocolo de Investigación</h2>
+                        <p className="text-gray-600 mb-6">El primer paso es desarrollar un protocolo de investigación completo y bien estructurado. Asegúrese de incluir los siguientes elementos esenciales:</p>
+                        <ul className="space-y-2">
+                            <ListItem icon={FileText}>Título, investigadores y adscripciones.</ListItem>
+                            <ListItem icon={FileText}>Introducción, antecedentes, justificación y marco teórico.</ListItem>
+                            <ListItem icon={FileText}>Hipótesis y objetivos (generales y específicos).</ListItem>
+                            <ListItem icon={FileText}>Material y métodos (diseño, universo, muestra, criterios, variables, procedimientos, etc.).</ListItem>
+                            <ListItem icon={FileText}>Aspectos éticos y carta de consentimiento informado.</ListItem>
+                            <ListItem icon={FileText}>Recursos, cronograma y referencias bibliográficas.</ListItem>
+                        </ul>
+                    </div>
+                );
+
+            case 2: // Autorización
+                return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 2: Autorización del Protocolo en su Unidad</h2>
+                        <p className="text-gray-600 mb-6">Su protocolo debe ser presentado y autorizado por la máxima autoridad de su unidad de adscripción (hospital, universidad, etc.).</p>
+                        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                            <p className="font-semibold text-yellow-800">Requisito Indispensable:</p>
+                            <p className="text-yellow-700">Deberá obtener la <span className="font-bold">Carta de Aceptación (Formato 01/INV/25)</span> firmada. Sin este documento, su solicitud no podrá proceder.</p>
+                        </div>
+                    </div>
+                );
+
+            case 3: // Comités
+                return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 3: Aprobación por Comités</h2>
+                        <p className="text-gray-600 mb-6">Todo proyecto de investigación debe ser evaluado y aprobado por los comités institucionales correspondientes. Asegúrese de contar con los dictámenes favorables de:</p>
+                         <ul className="space-y-2">
+                            <ListItem icon={Users}><span className="font-bold">Comité de Ética en Investigación:</span> Evalúa la protección de los derechos y bienestar de los participantes.</ListItem>
+                            <ListItem icon={Users}><span className="font-bold">Comité de Investigación:</span> Analiza el rigor metodológico y la viabilidad científica del protocolo.</ListItem>
+                            <ListItem icon={Shield}><span className="font-bold">Comité de Bioseguridad:</span> Requerido si su estudio involucra el manejo de agentes biológicos, químicos o radiológicos.</ListItem>
+                        </ul>
+                        <p className="mt-4 text-sm text-gray-500">Si su institución no cuenta con estos comités, la Dirección de Investigación en Salud (DIS) puede orientarle.</p>
+                    </div>
+                );
+            case 4: // Formatos
+                return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 4: Llenado de Formatos Oficiales</h2>
+                        <p className="text-gray-600 mb-6">Complete los siguientes formatos para formalizar su solicitud. Puede hacer clic en cada uno para descargar el manual con los formatos.</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormLink formatId="Formato 02/INV/25" description="Solicitud oficial de registro ante el REI." />
+                            <FormLink formatId="Formato 03A/INV/25 y 03B/INV/25" description="Síntesis curricular del investigador responsable y tesista." />
+                            <FormLink formatId="Formato 04/INV/25" description="Carta compromiso y autorización para publicar resúmenes en el repositorio público." />
+                            <FormLink formatId="Formato 05A/INV/25" description="Resumen del protocolo para la base de datos pública." />
+                        </div>
+                         <div className="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                            <p className="font-semibold text-blue-800">Repositorio Público y Manual:</p>
+                            <p className="text-blue-700">Los resúmenes serán publicados en la comunidad Zenodo del REI. Para consultar los formatos y el manual completo, visite: <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Manual de Usuario REI (PDF)</a></p>
+                        </div>
+                    </div>
+                );
+            case 5: // Expediente
+                return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 5: Integración y Entrega del Expediente</h2>
+                        <p className="text-gray-600 mb-6">Organice su expediente con todos los documentos en el siguiente orden estricto. Deberá entregarlo tanto en formato físico (sobre cerrado) como digital (USB).</p>
+                        <ol className="list-decimal list-inside space-y-2 text-gray-700 bg-gray-50 p-4 rounded-lg border">
+                           <li>Protocolo de Investigación completo.</li>
+                           <li>Carta de Aceptación de su unidad (Formato 01/INV/25).</li>
+                           <li>Dictamen del Comité de Investigación.</li>
+                           <li>Dictamen del Comité de Ética en Investigación.</li>
+                           <li>Dictamen del Comité de Bioseguridad (si aplica).</li>
+                           <li>Solicitud de REI (Formato 02/INV/25).</li>
+                           <li>Síntesis Curricular (Formatos 03A/B/INV/25).</li>
+                           <li>Carta compromiso y autorización (Formato 04/INV/25).</li>
+                           <li>Resumen del protocolo (Formato 05A/INV/25).</li>
+                        </ol>
+                    </div>
+                );
+            case 6: // Obligaciones
+                 return (
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 6: Expedición del REI y Obligaciones Posteriores</h2>
+                        <p className="text-gray-600 mb-6">Una vez que la DIS verifique su expediente, se le asignará un número de registro oficial REI. A partir de ese momento, adquiere los siguientes compromisos:</p>
+                         <ul className="space-y-4">
+                            <ListItem icon={Bell}>
+                                <div>
+                                    <span className="font-bold">Notificación de Cambios:</span>
+                                    <p>Debe informar a la DIS si su proyecto se pospone o cancela.</p>
+                                </div>
+                            </ListItem>
+                            <ListItem icon={FileText}>
+                                <div>
+                                    <span className="font-bold">Entrega de Reporte Final:</span>
+                                    <p>Al concluir, debe entregar el <span className="font-bold">Reporte Final (Formato 05B/INV/25)</span>. El resumen de este reporte también será publicado en el repositorio Zenodo para compartir sus hallazgos.</p>
+                                </div>
+                            </ListItem>
+                        </ul>
+                    </div>
+                );
+            case 7: // Finalizado
+                return (
+                    <div className="text-center">
+                        <Star className="mx-auto h-16 w-16 text-yellow-400 mb-4" />
+                        <h2 className="text-3xl font-bold text-gray-800 mb-4">¡Proceso Completado!</h2>
+                        <p className="text-lg text-gray-600 mb-6">Ha revisado todos los pasos necesarios para el registro de su investigación en el REI.</p>
+                        <p className="text-gray-600 mb-8">Ahora tiene una guía clara para preparar y entregar su expediente. ¡Mucho éxito en su proyecto de investigación!</p>
+                        <button onClick={() => goToStep(0)} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                );
+            default:
+                return <div>Paso no encontrado</div>;
+        }
+    };
+
+    return (
+        <div className="bg-gray-100 min-h-screen font-sans flex flex-col items-center justify-center p-4">
+            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+                
+                {/* Sidebar */}
+                <div className="w-full md:w-1/3 bg-gray-800 p-8 text-white">
+                    <h1 className="font-bold text-2xl mb-2">REI Jalisco</h1>
+                    <p className="text-gray-300 mb-8 text-sm">Registro Estatal de Investigación</p>
+                    <nav>
+                        <ul>
+                            {steps.map((step, index) => (
+                                <li key={index} className="mb-3">
+                                    <button onClick={() => goToStep(index)} className={`flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200 ${currentStep === index ? 'bg-blue-600 font-bold' : 'hover:bg-gray-700'}`}>
+                                        <step.icon className={`mr-3 h-5 w-5 ${currentStep === index ? 'text-white' : 'text-gray-400'}`} />
+                                        <span>{step.name}</span>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+
+                {/* Main Content */}
+                <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between">
+                    <div className="flex-grow">
+                        {renderStepContent()}
+                    </div>
+                    
+                    {/* Navigation */}
+                    {currentStep < steps.length -1 && (
+                      <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
+                          <button 
+                              onClick={prevStep} 
+                              disabled={currentStep === 0}
+                              className="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                              <ArrowLeft className="mr-2 h-5 w-5" />
+                              Anterior
+                          </button>
+                          <div className="text-sm text-gray-500">
+                              Paso {currentStep + 1} de {steps.length - 1}
+                          </div>
+                          <button 
+                              onClick={nextStep} 
+                              className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center">
+                              Siguiente
+                              <ArrowRight className="ml-2 h-5 w-5" />
+                          </button>
+                      </div>
+                    )}
+                </div>
+            </div>
+            <footer className="w-full max-w-4xl text-center text-xs text-gray-500 py-4">
+                <p>Dirección de Investigación en Salud 2025, Proyecto realizado por Netzahualpilli Delgado. Todos los Derechos Reservados.</p>
+            </footer>
+        </div>
+    );
+};
+
+export default App;
+
 
