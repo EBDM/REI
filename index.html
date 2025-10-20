@@ -1,162 +1,156 @@
-import React, { useState } from 'react';
-import { FileText, CheckCircle, Home, Users, Shield, FolderPlus, Send, Bell, Star, ArrowRight, ArrowLeft } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Registro REI - Salud Jalisco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ensures smooth scrolling and layout consistency */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Hides the main content until the script has decided which step to show */
+        .step-content.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
 
-// Helper component for styled list items
-const ListItem = ({ children, icon }) => {
-    const Icon = icon;
-    return (
-        <li className="flex items-start space-x-3 py-2">
-            <div className="flex-shrink-0">
-                <Icon className="h-6 w-6 text-blue-500 mt-1" aria-hidden="true" />
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+            
+            <!-- Sidebar -->
+            <div class="w-full md:w-1/3 bg-gray-800 p-8 text-white">
+                <h1 class="font-bold text-2xl mb-2">REI Jalisco</h1>
+                <p class="text-gray-300 mb-8 text-sm">Registro Estatal de Investigación</p>
+                <nav>
+                    <ul>
+                        <!-- Sidebar navigation items will be dynamically handled but are listed here for structure -->
+                        <li class="mb-3">
+                            <button data-step-nav="0" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Bienvenida</span>
+                            </button>
+                        </li>
+                        <li class="mb-3">
+                            <button data-step-nav="1" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Protocolo</span>
+                            </button>
+                        </li>
+                        <li class="mb-3">
+                            <button data-step-nav="2" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Autorización</span>
+                            </button>
+                        </li>
+                        <li class="mb-3">
+                            <button data-step-nav="3" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Comités</span>
+                            </button>
+                        </li>
+                        <li class="mb-3">
+                            <button data-step-nav="4" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Formatos</span>
+                            </button>
+                        </li>
+                         <li class="mb-3">
+                            <button data-step-nav="5" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Expediente</span>
+                            </button>
+                        </li>
+                         <li class="mb-3">
+                            <button data-step-nav="6" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Obligaciones</span>
+                            </button>
+                        </li>
+                        <li class="mb-3">
+                            <button data-step-nav="7" class="flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200">
+                                <span class="nav-icon"><!-- SVG icon here --></span>
+                                <span>Finalizado</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <span className="text-gray-700">{children}</span>
-        </li>
-    );
-};
 
-// Helper component for form links
-const FormLink = ({ formatId, description }) => (
-    <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" className="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
-        <p className="font-semibold text-blue-700 group-hover:underline">{formatId}</p>
-        <p className="text-sm text-gray-600">{description}</p>
-    </a>
-);
-
-
-const App = () => {
-    const [currentStep, setCurrentStep] = useState(0);
-
-    const steps = [
-        {
-            name: "Bienvenida",
-            icon: Home
-        },
-        {
-            name: "Protocolo",
-            icon: FileText
-        },
-        {
-            name: "Autorización",
-            icon: CheckCircle
-        },
-        {
-            name: "Comités",
-            icon: Users
-        },
-        {
-            name: "Formatos",
-            icon: FolderPlus
-        },
-        {
-            name: "Expediente",
-            icon: Send
-        },
-        {
-            name: "Obligaciones",
-            icon: Bell
-        },
-        {
-            name: "Finalizado",
-            icon: Star
-        }
-    ];
-
-    const nextStep = () => {
-        if (currentStep < steps.length - 1) {
-            setCurrentStep(currentStep + 1);
-        }
-    };
-
-    const prevStep = () => {
-        if (currentStep > 0) {
-            setCurrentStep(currentStep - 1);
-        }
-    };
-    
-    const goToStep = (stepIndex) => {
-        if (stepIndex >= 0 && stepIndex < steps.length) {
-            setCurrentStep(stepIndex);
-        }
-    };
-
-    const renderStepContent = () => {
-        switch (currentStep) {
-            case 0: // Welcome
-                return (
-                    <div className="text-center">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Asistente de Registro Estatal de Investigación (REI)</h2>
-                        <p className="text-lg text-gray-600 mb-6">Bienvenido/a. Esta herramienta le guiará paso a paso a través del proceso para registrar su protocolo de investigación ante la Secretaría de Salud Jalisco.</p>
-                        <p className="text-gray-600 mb-8">El objetivo del REI es centralizar, sistematizar y asegurar la calidad ética de las investigaciones en salud en el estado, optimizando recursos y fortaleciendo las políticas públicas.</p>
-                        <button onClick={nextStep} className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center justify-center mx-auto">
-                            Comenzar Registro <ArrowRight className="ml-2 h-5 w-5" />
+            <!-- Main Content -->
+            <div class="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between">
+                <div class="flex-grow">
+                    <!-- Step 0: Welcome -->
+                    <div id="step-0" class="step-content text-center">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Asistente de Registro Estatal de Investigación (REI)</h2>
+                        <p class="text-lg text-gray-600 mb-6">Bienvenido/a. Esta herramienta le guiará paso a paso a través del proceso para registrar su protocolo de investigación ante la Secretaría de Salud Jalisco.</p>
+                        <p class="text-gray-600 mb-8">El objetivo del REI es centralizar, sistematizar y asegurar la calidad ética de las investigaciones en salud en el estado, optimizando recursos y fortaleciendo las políticas públicas.</p>
+                        <button id="start-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center justify-center mx-auto">
+                            Comenzar Registro <span id="arrow-right-svg-start" class="ml-2 h-5 w-5"></span>
                         </button>
                     </div>
-                );
 
-            case 1: // Protocolo
-                return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 1: Elaboración del Protocolo de Investigación</h2>
-                        <p className="text-gray-600 mb-6">El primer paso es desarrollar un protocolo de investigación completo y bien estructurado. Asegúrese de incluir los siguientes elementos esenciales:</p>
-                        <ul className="space-y-2">
-                            <ListItem icon={FileText}>Título, investigadores y adscripciones.</ListItem>
-                            <ListItem icon={FileText}>Introducción, antecedentes, justificación y marco teórico.</ListItem>
-                            <ListItem icon={FileText}>Hipótesis y objetivos (generales y específicos).</ListItem>
-                            <ListItem icon={FileText}>Material y métodos (diseño, universo, muestra, criterios, variables, procedimientos, etc.).</ListItem>
-                            <ListItem icon={FileText}>Aspectos éticos y carta de consentimiento informado.</ListItem>
-                            <ListItem icon={FileText}>Recursos, cronograma y referencias bibliográficas.</ListItem>
-                        </ul>
+                    <!-- Step 1: Protocolo -->
+                    <div id="step-1" class="step-content hidden">
+                         <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 1: Elaboración del Protocolo de Investigación</h2>
+                        <p class="text-gray-600 mb-6">El primer paso es desarrollar un protocolo de investigación completo y bien estructurado. Asegúrese de incluir los siguientes elementos esenciales:</p>
+                        <ul class="space-y-2" id="protocolo-list"></ul>
                     </div>
-                );
-
-            case 2: // Autorización
-                return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 2: Autorización del Protocolo en su Unidad</h2>
-                        <p className="text-gray-600 mb-6">Su protocolo debe ser presentado y autorizado por la máxima autoridad de su unidad de adscripción (hospital, universidad, etc.).</p>
-                        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-                            <p className="font-semibold text-yellow-800">Requisito Indispensable:</p>
-                            <p className="text-yellow-700">Deberá obtener la <span className="font-bold">Carta de Aceptación (Formato 01/INV/25)</span> firmada. Sin este documento, su solicitud no podrá proceder.</p>
+                    
+                    <!-- Step 2: Autorización -->
+                    <div id="step-2" class="step-content hidden">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 2: Autorización del Protocolo en su Unidad</h2>
+                        <p class="text-gray-600 mb-6">Su protocolo debe ser presentado y autorizado por la máxima autoridad de su unidad de adscripción (hospital, universidad, etc.).</p>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                            <p class="font-semibold text-yellow-800">Requisito Indispensable:</p>
+                            <p class="text-yellow-700">Deberá obtener la <span class="font-bold">Carta de Aceptación (Formato 01/INV/25)</span> firmada. Sin este documento, su solicitud no podrá proceder.</p>
                         </div>
                     </div>
-                );
 
-            case 3: // Comités
-                return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 3: Aprobación por Comités</h2>
-                        <p className="text-gray-600 mb-6">Todo proyecto de investigación debe ser evaluado y aprobado por los comités institucionales correspondientes. Asegúrese de contar con los dictámenes favorables de:</p>
-                         <ul className="space-y-2">
-                            <ListItem icon={Users}><span className="font-bold">Comité de Ética en Investigación:</span> Evalúa la protección de los derechos y bienestar de los participantes.</ListItem>
-                            <ListItem icon={Users}><span className="font-bold">Comité de Investigación:</span> Analiza el rigor metodológico y la viabilidad científica del protocolo.</ListItem>
-                            <ListItem icon={Shield}><span className="font-bold">Comité de Bioseguridad:</span> Requerido si su estudio involucra el manejo de agentes biológicos, químicos o radiológicos.</ListItem>
-                        </ul>
-                        <p className="mt-4 text-sm text-gray-500">Si su institución no cuenta con estos comités, la Dirección de Investigación en Salud (DIS) puede orientarle.</p>
+                    <!-- Step 3: Comités -->
+                     <div id="step-3" class="step-content hidden">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 3: Aprobación por Comités</h2>
+                        <p class="text-gray-600 mb-6">Todo proyecto de investigación debe ser evaluado y aprobado por los comités institucionales correspondientes. Asegúrese de contar con los dictámenes favorables de:</p>
+                        <ul class="space-y-2" id="comites-list"></ul>
+                        <p class="mt-4 text-sm text-gray-500">Si su institución no cuenta con estos comités, la Dirección de Investigación en Salud (DIS) puede orientarle.</p>
                     </div>
-                );
-            case 4: // Formatos
-                return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 4: Llenado de Formatos Oficiales</h2>
-                        <p className="text-gray-600 mb-6">Complete los siguientes formatos para formalizar su solicitud. Puede hacer clic en cada uno para descargar el manual con los formatos.</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormLink formatId="Formato 02/INV/25" description="Solicitud oficial de registro ante el REI." />
-                            <FormLink formatId="Formato 03A/INV/25 y 03B/INV/25" description="Síntesis curricular del investigador responsable y tesista." />
-                            <FormLink formatId="Formato 04/INV/25" description="Carta compromiso y autorización para publicar resúmenes en el repositorio público." />
-                            <FormLink formatId="Formato 05A/INV/25" description="Resumen del protocolo para la base de datos pública." />
+                    
+                    <!-- Step 4: Formatos -->
+                    <div id="step-4" class="step-content hidden">
+                         <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 4: Llenado de Formatos Oficiales</h2>
+                        <p class="text-gray-600 mb-6">Complete los siguientes formatos para formalizar su solicitud. Puede hacer clic en cada uno para descargar el manual con los formatos.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" class="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
+                                <p class="font-semibold text-blue-700 group-hover:underline">Formato 02/INV/25</p>
+                                <p class="text-sm text-gray-600">Solicitud oficial de registro ante el REI.</p>
+                            </a>
+                            <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" class="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
+                                <p class="font-semibold text-blue-700 group-hover:underline">Formato 03A/INV/25 y 03B/INV/25</p>
+                                <p class="text-sm text-gray-600">Síntesis curricular del investigador responsable y tesista.</p>
+                            </a>
+                            <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" class="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
+                                <p class="font-semibold text-blue-700 group-hover:underline">Formato 04/INV/25</p>
+                                <p class="text-sm text-gray-600">Carta compromiso y autorización para publicar resúmenes en el repositorio público.</p>
+                            </a>
+                            <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" class="block p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors duration-200 group">
+                                <p class="font-semibold text-blue-700 group-hover:underline">Formato 05A/INV/25</p>
+                                <p class="text-sm text-gray-600">Resumen del protocolo para la base de datos pública.</p>
+                            </a>
                         </div>
-                         <div className="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-                            <p className="font-semibold text-blue-800">Repositorio Público y Manual:</p>
-                            <p className="text-blue-700">Los resúmenes serán publicados en la comunidad Zenodo del REI. Para consultar los formatos y el manual completo, visite: <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Manual de Usuario REI (PDF)</a></p>
+                         <div class="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                            <p class="font-semibold text-blue-800">Repositorio Público y Manual:</p>
+                            <p class="text-blue-700">Los resúmenes serán publicados en la comunidad Zenodo del REI. Para consultar los formatos y el manual completo, visite: <a href="https://github.com/EBDM/REI/blob/main/Manual_REI.pdf" target="_blank" rel="noopener noreferrer" class="font-bold underline hover:text-blue-600">Manual de Usuario REI (PDF)</a></p>
                         </div>
                     </div>
-                );
-            case 5: // Expediente
-                return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 5: Integración y Entrega del Expediente</h2>
-                        <p className="text-gray-600 mb-6">Organice su expediente con todos los documentos en el siguiente orden estricto. Deberá entregarlo tanto en formato físico (sobre cerrado) como digital (USB).</p>
-                        <ol className="list-decimal list-inside space-y-2 text-gray-700 bg-gray-50 p-4 rounded-lg border">
+
+                    <!-- Step 5: Expediente -->
+                    <div id="step-5" class="step-content hidden">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 5: Integración y Entrega del Expediente</h2>
+                        <p class="text-gray-600 mb-6">Organice su expediente con todos los documentos en el siguiente orden estricto. Deberá entregarlo tanto en formato físico (sobre cerrado) como digital (USB).</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 bg-gray-50 p-4 rounded-lg border">
                            <li>Protocolo de Investigación completo.</li>
                            <li>Carta de Aceptación de su unidad (Formato 01/INV/25).</li>
                            <li>Dictamen del Comité de Investigación.</li>
@@ -168,103 +162,172 @@ const App = () => {
                            <li>Resumen del protocolo (Formato 05A/INV/25).</li>
                         </ol>
                     </div>
-                );
-            case 6: // Obligaciones
-                 return (
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Paso 6: Expedición del REI y Obligaciones Posteriores</h2>
-                        <p className="text-gray-600 mb-6">Una vez que la DIS verifique su expediente, se le asignará un número de registro oficial REI. A partir de ese momento, adquiere los siguientes compromisos:</p>
-                         <ul className="space-y-4">
-                            <ListItem icon={Bell}>
-                                <div>
-                                    <span className="font-bold">Notificación de Cambios:</span>
-                                    <p>Debe informar a la DIS si su proyecto se pospone o cancela.</p>
-                                </div>
-                            </ListItem>
-                            <ListItem icon={FileText}>
-                                <div>
-                                    <span className="font-bold">Entrega de Reporte Final:</span>
-                                    <p>Al concluir, debe entregar el <span className="font-bold">Reporte Final (Formato 05B/INV/25)</span>. El resumen de este reporte también será publicado en el repositorio Zenodo para compartir sus hallazgos.</p>
-                                </div>
-                            </ListItem>
-                        </ul>
+
+                    <!-- Step 6: Obligaciones -->
+                    <div id="step-6" class="step-content hidden">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Paso 6: Expedición del REI y Obligaciones Posteriores</h2>
+                        <p class="text-gray-600 mb-6">Una vez que la DIS verifique su expediente, se le asignará un número de registro oficial REI. A partir de ese momento, adquiere los siguientes compromisos:</p>
+                        <ul class="space-y-4" id="obligaciones-list"></ul>
                     </div>
-                );
-            case 7: // Finalizado
-                return (
-                    <div className="text-center">
-                        <Star className="mx-auto h-16 w-16 text-yellow-400 mb-4" />
-                        <h2 className="text-3xl font-bold text-gray-800 mb-4">¡Proceso Completado!</h2>
-                        <p className="text-lg text-gray-600 mb-6">Ha revisado todos los pasos necesarios para el registro de su investigación en el REI.</p>
-                        <p className="text-gray-600 mb-8">Ahora tiene una guía clara para preparar y entregar su expediente. ¡Mucho éxito en su proyecto de investigación!</p>
-                        <button onClick={() => goToStep(0)} className="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md">
+                    
+                    <!-- Step 7: Finalizado -->
+                    <div id="step-7" class="step-content hidden text-center">
+                        <span id="star-svg-final" class="mx-auto h-16 w-16 text-yellow-400 mb-4"></span>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Proceso Completado!</h2>
+                        <p class="text-lg text-gray-600 mb-6">Ha revisado todos los pasos necesarios para el registro de su investigación en el REI.</p>
+                        <p class="text-gray-600 mb-8">Ahora tiene una guía clara para preparar y entregar su expediente. ¡Mucho éxito en su proyecto de investigación!</p>
+                        <button id="reset-btn" class="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-md">
                             Volver al Inicio
                         </button>
                     </div>
-                );
-            default:
-                return <div>Paso no encontrado</div>;
-        }
-    };
-
-    return (
-        <div className="bg-gray-100 min-h-screen font-sans flex flex-col items-center justify-center p-4">
-            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
-                
-                {/* Sidebar */}
-                <div className="w-full md:w-1/3 bg-gray-800 p-8 text-white">
-                    <h1 className="font-bold text-2xl mb-2">REI Jalisco</h1>
-                    <p className="text-gray-300 mb-8 text-sm">Registro Estatal de Investigación</p>
-                    <nav>
-                        <ul>
-                            {steps.map((step, index) => (
-                                <li key={index} className="mb-3">
-                                    <button onClick={() => goToStep(index)} className={`flex items-center w-full text-left p-3 rounded-lg transition-colors duration-200 ${currentStep === index ? 'bg-blue-600 font-bold' : 'hover:bg-gray-700'}`}>
-                                        <step.icon className={`mr-3 h-5 w-5 ${currentStep === index ? 'text-white' : 'text-gray-400'}`} />
-                                        <span>{step.name}</span>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
                 </div>
-
-                {/* Main Content */}
-                <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between">
-                    <div className="flex-grow">
-                        {renderStepContent()}
-                    </div>
-                    
-                    {/* Navigation */}
-                    {currentStep < steps.length -1 && (
-                      <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
-                          <button 
-                              onClick={prevStep} 
-                              disabled={currentStep === 0}
-                              className="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
-                              <ArrowLeft className="mr-2 h-5 w-5" />
-                              Anterior
-                          </button>
-                          <div className="text-sm text-gray-500">
-                              Paso {currentStep + 1} de {steps.length - 1}
-                          </div>
-                          <button 
-                              onClick={nextStep} 
-                              className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center">
-                              Siguiente
-                              <ArrowRight className="ml-2 h-5 w-5" />
-                          </button>
-                      </div>
-                    )}
+                
+                <!-- Navigation -->
+                <div id="navigation-container" class="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
+                    <button id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                        <span id="arrow-left-svg" class="mr-2 h-5 w-5"></span> Anterior
+                    </button>
+                    <div id="step-counter" class="text-sm text-gray-500"></div>
+                    <button id="next-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md flex items-center">
+                        Siguiente <span id="arrow-right-svg-next" class="ml-2 h-5 w-5"></span>
+                    </button>
                 </div>
             </div>
-            <footer className="w-full max-w-4xl text-center text-xs text-gray-500 py-4">
-                <p>Dirección de Investigación en Salud 2025, Proyecto realizado por Netzahualpilli Delgado. Todos los Derechos Reservados.</p>
-            </footer>
         </div>
-    );
-};
+        <footer class="w-full max-w-4xl text-center text-xs text-gray-500 py-4">
+            <p>Dirección de Investigación en Salud 2025, Proyecto realizado por Netzahualpilli Delgado. Todos los Derechos Reservados.</p>
+        </footer>
+    </div>
 
-export default App;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentStep = 0;
+            const steps = document.querySelectorAll('.step-content');
+            const navButtons = document.querySelectorAll('[data-step-nav]');
+            const nextButton = document.getElementById('next-btn');
+            const prevButton = document.getElementById('prev-btn');
+            const startButton = document.getElementById('start-btn');
+            const resetButton = document.getElementById('reset-btn');
+            const stepCounter = document.getElementById('step-counter');
+            const navigationContainer = document.getElementById('navigation-container');
+
+            const icons = {
+                Home: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`,
+                FileText: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>`,
+                CheckCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+                Users: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+                Shield: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+                FolderPlus: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"></path><line x1="12" y1="10" x2="12" y2="16"></line><line x1="9" y1="13" x2="15" y2="13"></line></svg>`,
+                Send: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`,
+                Bell: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 h-5 w-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`,
+                Star: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-16 w-16 text-yellow-400 mb-4 mx-auto"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
+                ArrowRight: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`,
+                ArrowLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`
+            };
+            
+            const stepIcons = ['Home', 'FileText', 'CheckCircle', 'Users', 'FolderPlus', 'Send', 'Bell', 'Star'];
+
+            function createListItem(iconSvg, text) {
+                return `<li class="flex items-start space-x-3 py-2">
+                            <div class="flex-shrink-0">
+                                <span class="h-6 w-6 text-blue-500 mt-1">${iconSvg}</span>
+                            </div>
+                            <span class="text-gray-700">${text}</span>
+                        </li>`;
+            }
+
+            // Populate dynamic content
+            document.getElementById('protocolo-list').innerHTML = [
+                'Título, investigadores y adscripciones.',
+                'Introducción, antecedentes, justificación y marco teórico.',
+                'Hipótesis y objetivos (generales y específicos).',
+                'Material y métodos (diseño, universo, muestra, criterios, variables, procedimientos, etc.).',
+                'Aspectos éticos y carta de consentimiento informado.',
+                'Recursos, cronograma y referencias bibliográficas.'
+            ].map(text => createListItem(icons.FileText, text)).join('');
+
+            document.getElementById('comites-list').innerHTML = [
+                `<span class="font-bold">Comité de Ética en Investigación:</span> Evalúa la protección de los derechos y bienestar de los participantes.`,
+                `<span class="font-bold">Comité de Investigación:</span> Analiza el rigor metodológico y la viabilidad científica del protocolo.`,
+                `<span class="font-bold">Comité de Bioseguridad:</span> Requerido si su estudio involucra el manejo de agentes biológicos, químicos o radiológicos.`
+            ].map((text, i) => createListItem(i < 2 ? icons.Users : icons.Shield, text)).join('');
+            
+            document.getElementById('obligaciones-list').innerHTML = [
+                 `<div><span class="font-bold">Notificación de Cambios:</span><p>Debe informar a la DIS si su proyecto se pospone o cancela.</p></div>`,
+                 `<div><span class="font-bold">Entrega de Reporte Final:</span><p>Al concluir, debe entregar el <span class="font-bold">Reporte Final (Formato 05B/INV/25)</span>. El resumen de este reporte también será publicado en el repositorio Zenodo para compartir sus hallazgos.</p></div>`
+            ].map((text, i) => createListItem(i === 0 ? icons.Bell : icons.FileText, text)).join('');
 
 
+            // Populate icons
+            document.getElementById('arrow-right-svg-start').innerHTML = icons.ArrowRight;
+            document.getElementById('arrow-right-svg-next').innerHTML = icons.ArrowRight;
+            document.getElementById('arrow-left-svg').innerHTML = icons.ArrowLeft;
+            document.getElementById('star-svg-final').innerHTML = icons.Star;
+            navButtons.forEach((btn, index) => {
+                btn.querySelector('.nav-icon').innerHTML = icons[stepIcons[index]];
+            });
+
+            const updateView = (stepIndex) => {
+                currentStep = stepIndex;
+
+                steps.forEach((step, index) => {
+                    if (index === currentStep) {
+                        step.classList.remove('hidden');
+                    } else {
+                        step.classList.add('hidden');
+                    }
+                });
+
+                navButtons.forEach((btn, index) => {
+                    const iconSpan = btn.querySelector('.nav-icon > svg');
+                    if (index === currentStep) {
+                        btn.classList.add('bg-blue-600', 'font-bold');
+                        btn.classList.remove('hover:bg-gray-700');
+                        iconSpan.classList.add('text-white');
+                        iconSpan.classList.remove('text-gray-400');
+                    } else {
+                        btn.classList.remove('bg-blue-600', 'font-bold');
+                        btn.classList.add('hover:bg-gray-700');
+                        iconSpan.classList.remove('text-white');
+                        iconSpan.classList.add('text-gray-400');
+                    }
+                });
+                
+                if(currentStep > 0 && currentStep < steps.length - 1) {
+                    navigationContainer.classList.remove('hidden');
+                } else {
+                    navigationContainer.classList.add('hidden');
+                }
+                
+                prevButton.disabled = currentStep === 0;
+                stepCounter.textContent = `Paso ${currentStep} de ${steps.length - 2}`;
+            };
+
+            nextButton.addEventListener('click', () => {
+                if (currentStep < steps.length - 1) {
+                    updateView(currentStep + 1);
+                }
+            });
+
+            prevButton.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    updateView(currentStep - 1);
+                }
+            });
+
+            startButton.addEventListener('click', () => updateView(1));
+            resetButton.addEventListener('click', () => updateView(0));
+
+            navButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const stepIndex = parseInt(btn.dataset.stepNav);
+                    updateView(stepIndex);
+                });
+            });
+
+            // Initial view setup
+            updateView(0);
+        });
+    </script>
+</body>
+</html>
